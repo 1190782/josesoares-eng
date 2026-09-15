@@ -73,7 +73,7 @@ const cv: ICv = {
     pt: "Porto, Portugal. Disponível para remoto.",
     en: "Porto, Portugal. Open to remote.",
   },
-  email: "soarezel414@gmail.com",
+  email: "soareze1414@gmail.com",
   phone: "+351 911 108 710",
   website: "https://josesoares-eng.com",
   linkedin: "https://www.linkedin.com/in/jose-soares-it/",
