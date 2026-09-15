@@ -1,8 +1,9 @@
 {
-  // Astro builds a fully static site into ./dist, so Workers Static Assets can
-  // serve it directly — there is no Worker script and no Astro adapter needed.
+  // The Worker sits in front of the built Astro output: it answers
+  // POST /api/contact and passes everything else to the static assets.
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "josesoares-eng",
+  "main": "./src/worker/index.ts",
   "compatibility_date": "2026-09-15",
 
   // Kept on while the site is being built, so there is somewhere to review it.
@@ -12,8 +13,19 @@
   "workers_dev": true,
   "preview_urls": true,
 
+  "observability": {
+    "enabled": true
+  },
+
+  "vars": {
+    // Where contact form submissions are delivered. While Resend is sending
+    // from its test address, this has to match the Resend account's own email.
+    "CONTACT_TO": "soareze1414@gmail.com"
+  },
+
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     // Serve dist/404.html for paths that do not match a built page.
     "not_found_handling": "404-page"
   }
