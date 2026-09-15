@@ -1,0 +1,29 @@
+---
+import type { GetStaticPaths } from "astro";
+
+import ServiceDocument from "../../components/ServiceDocument.astro";
+import ui from "../../i18n/Ui";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { services } from "../../data/Services";
+
+export const getStaticPaths = (() => {
+  return services.map((service) => ({
+    params: { slug: service.slug.pt },
+    props: { service },
+  }));
+}) satisfies GetStaticPaths;
+
+const locale = "pt" as const;
+const strings = ui[locale];
+const { service } = Astro.props;
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${service.heading[locale]} | ${strings.siteName}, Porto`}
+  description={service.description[locale]}
+  path={`/servicos/${service.slug.pt}/`}
+  alternatePath={`/en/services/${service.slug.en}/`}
+>
+  <ServiceDocument locale={locale} service={service} />
+</BaseLayout>

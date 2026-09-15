@@ -27,6 +27,13 @@ export interface IUiStrings {
   homeProcessLead: string;
   homeIncludes: string;
 
+  serviceAudience: string;
+  serviceFaq: string;
+  serviceOthers: string;
+  serviceCta: string;
+  serviceLearnMore: string;
+  breadcrumbHome: string;
+
   contactHeading: string;
   contactLead: string;
   formName: string;
@@ -101,6 +108,13 @@ const ui: Record<Locale, IUiStrings> = {
     homeProcess: "Como trabalho",
     homeProcessLead: "Quatro passos, sem surpresas pelo meio.",
     homeIncludes: "Inclui",
+
+    serviceAudience: "Para quem é",
+    serviceFaq: "Perguntas frequentes",
+    serviceOthers: "Outros serviços",
+    serviceCta: "Pedir orçamento",
+    serviceLearnMore: "Saber mais",
+    breadcrumbHome: "Início",
 
     contactHeading: "Falamos?",
     contactLead:
@@ -177,6 +191,13 @@ const ui: Record<Locale, IUiStrings> = {
     homeProcess: "How I work",
     homeProcessLead: "Four steps, no surprises along the way.",
     homeIncludes: "Includes",
+
+    serviceAudience: "Who it is for",
+    serviceFaq: "Frequently asked questions",
+    serviceOthers: "Other services",
+    serviceCta: "Request a quote",
+    serviceLearnMore: "Learn more",
+    breadcrumbHome: "Home",
 
     contactHeading: "Shall we talk?",
     contactLead:
