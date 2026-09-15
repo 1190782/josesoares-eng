@@ -10,6 +10,8 @@
   --color-navy-700: #2c3e4e;
   --color-navy-600: #3a4e5f;
   --color-navy-500: #54697c;
+  /* Muted text on the dark ground — navy-500 is too dim to read there. */
+  --color-navy-300: #a6b7c4;
 
   --color-brass-400: #e0b36a;
   --color-brass-300: #efc584;
@@ -58,6 +60,27 @@
   }
 }
 
+/* Cards the technology filter has ruled out stay readable, just recede. */
+[data-card] {
+  transition:
+    opacity 180ms ease,
+    border-color 180ms ease;
+}
+
+[data-card][data-dimmed="true"] {
+  opacity: 0.38;
+}
+
+[data-card][data-matched="true"] {
+  border-color: var(--color-brass-400);
+}
+
+[data-chip][data-matched="true"] {
+  background-color: var(--color-brass-400);
+  border-color: var(--color-brass-400);
+  color: var(--color-navy-900);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -95,11 +118,36 @@
     display: none !important;
   }
 
+  /*
+   * The dark masthead becomes plain type on white. This has to reach the
+   * descendants too: the name and the contact row are near-white on screen and
+   * would otherwise print invisible.
+   */
   .print-plain {
     background: #fff !important;
-    color: #000 !important;
+    border-bottom: 2px solid #000 !important;
     box-shadow: none !important;
-    border-color: #999 !important;
+  }
+
+  .print-plain,
+  .print-plain * {
+    color: #000 !important;
+    background: transparent !important;
+  }
+
+  .eyebrow {
+    color: #000 !important;
+  }
+
+  /* @page supplies the margins, so the generous screen padding collapses. */
+  .print-reset-pad {
+    padding: 0 !important;
+  }
+
+  .print-section {
+    padding-top: 10pt !important;
+    padding-bottom: 10pt !important;
+    border-color: #bbb !important;
   }
 
   .print-break-avoid {
@@ -107,15 +155,23 @@
     page-break-inside: avoid;
   }
 
+  /* On paper every entry counts, whatever the filter was showing on screen. */
+  [data-card] {
+    opacity: 1 !important;
+    border-color: #bbb !important;
+    box-shadow: none !important;
+    padding: 0 0 6pt !important;
+  }
+
+  [data-chip] {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+    color: #000 !important;
+  }
+
   a {
     color: #000 !important;
     text-decoration: none;
-  }
-
-  /* Spell out link targets that carry information on paper. */
-  .print-url::after {
-    content: " (" attr(href) ")";
-    font-size: 8.5pt;
-    word-break: break-all;
   }
 }

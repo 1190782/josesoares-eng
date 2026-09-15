@@ -1,0 +1,335 @@
+---
+import cv, { type Locale } from "../data/Cv";
+import ui, { formatMonth, formatRange } from "../i18n/Ui";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const strings = ui[locale];
+
+const contactLinks = [
+  { label: cv.email, href: `mailto:${cv.email}` },
+  { label: cv.phone, href: `tel:${cv.phone.replace(/\s/g, "")}` },
+  { label: "josesoares-eng.com", href: cv.website },
+  { label: "linkedin.com/in/jose-soares-it", href: cv.linkedin },
+];
+
+// Derived at build time so the figures never go stale in the way a hardcoded
+// number does.
+const earliestStart = cv.positions.reduce(
+  (earliest, position) => (position.start < earliest ? position.start : earliest),
+  cv.positions[0].start,
+);
+const [earliestYear, earliestMonth] = earliestStart.split("-").map(Number);
+const now = new Date();
+const monthsOfExperience =
+  (now.getFullYear() - earliestYear) * 12 + (now.getMonth() + 1 - earliestMonth);
+const yearsOfExperience = Math.floor(monthsOfExperience / 12);
+
+const productionStack = [...new Set(cv.positions.flatMap((position) => position.stack))].sort(
+  (a, b) => a.localeCompare(b),
+);
+
+const figures = [
+  { value: `${yearsOfExperience}+`, label: strings.cvYearsLabel },
+  { value: String(cv.positions.length), label: strings.cvRolesLabel },
+  { value: String(productionStack.length), label: strings.cvStackLabel },
+];
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: cv.name,
+  jobTitle: cv.headline[locale],
+  email: cv.email,
+  telephone: cv.phone,
+  url: cv.website,
+  sameAs: [cv.linkedin],
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Porto",
+    addressCountry: "PT",
+  },
+  worksFor: { "@type": "Organization", name: cv.positions[0].company },
+  alumniOf: cv.education.map((degree) => ({
+    "@type": "EducationalOrganization",
+    name: degree.institution,
+  })),
+  knowsAbout: productionStack,
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+
+<article class="pb-24">
+  <header class="print-plain border-b-4 border-brass-400 bg-navy-800 text-paper-100">
+    <div class="print-reset-pad mx-auto max-w-5xl px-6 py-14">
+      <p class="eyebrow text-brass-400">{strings.cvTitle}</p>
+      <h1 class="lockup mt-5 text-4xl leading-none text-paper-50 sm:text-5xl">{cv.name}</h1>
+      <p class="lockup mt-4 text-sm text-brass-400">{cv.headline[locale]}</p>
+      <p class="mt-6 text-navy-300">{cv.location[locale]}</p>
+
+      <ul class="mt-8 flex flex-wrap gap-x-8 gap-y-3 font-mono text-xs">
+        {
+          contactLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-paper-100 underline decoration-brass-600 underline-offset-4 transition hover:text-brass-300"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="print-hide mt-10">
+        <button
+          type="button"
+          id="print-cv"
+          class="border border-brass-400 bg-brass-400 px-6 py-3 text-sm font-medium text-navy-900 transition hover:bg-brass-300"
+        >
+          {strings.cvDownload}
+        </button>
+        <p class="mt-3 font-mono text-xs text-navy-300">{strings.cvDownloadHint}</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="mx-auto max-w-5xl px-6">
+    <div class="print-hide -mt-8 grid gap-4 sm:grid-cols-3">
+      {
+        figures.map((figure) => (
+          <div class="border border-paper-200 bg-white px-5 py-5 shadow-sm">
+            <p class="font-display text-4xl leading-none font-semibold tabular-nums text-navy-800">
+              {figure.value}
+            </p>
+            <p class="eyebrow mt-3 text-navy-500">{figure.label}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <section class="print-section print-break-avoid py-10">
+      <h2 class="eyebrow text-brass-600">{strings.cvSummary}</h2>
+      <p class="mt-4 max-w-prose border-l-2 border-brass-400 pl-5 text-lg leading-relaxed">
+        {cv.summary[locale]}
+      </p>
+    </section>
+
+    <section class="print-hide pb-4">
+      <h2 class="eyebrow text-brass-600">{strings.filterTitle}</h2>
+      <p class="mt-2 text-sm text-navy-500">{strings.filterHint}</p>
+      <div class="mt-5 flex flex-wrap gap-2" id="tech-filter">
+        <button
+          type="button"
+          data-tech="*"
+          data-matched="true"
+          data-chip
+          class="border border-navy-500 px-3 py-1.5 font-mono text-xs text-navy-800 transition hover:border-brass-400"
+        >
+          {strings.filterAll}
+        </button>
+        {
+          productionStack.map((tech) => (
+            <button
+              type="button"
+              data-tech={tech}
+              data-chip
+              class="border border-paper-200 bg-white px-3 py-1.5 font-mono text-xs text-navy-800 transition hover:border-brass-400"
+            >
+              {tech}
+            </button>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="print-section py-10">
+      <h2 class="eyebrow text-brass-600">{strings.cvExperience}</h2>
+      <div class="mt-6 flex flex-col gap-5" id="experience-list">
+        {
+          cv.positions.map((position) => (
+            <div
+              data-card
+              data-stack={position.stack.join("|")}
+              class="print-break-avoid border border-paper-200 bg-white p-6 shadow-sm"
+            >
+              <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+                <div>
+                  <h3 class="font-display text-xl font-medium text-navy-900">{position.company}</h3>
+                  <p class="mt-1 text-sm text-navy-500">{position.role[locale]}</p>
+                </div>
+                <div class="text-right">
+                  <p class="font-mono text-xs text-navy-800">
+                    {formatRange(position.start, position.end, locale)}
+                  </p>
+                  <p class="mt-1 font-mono text-xs text-navy-500">
+                    {position.location} · {position.arrangement[locale]}
+                  </p>
+                </div>
+              </div>
+
+              <p class="mt-5 max-w-prose leading-relaxed">{position.summary[locale]}</p>
+
+              <ul class="mt-4 flex max-w-prose list-disc flex-col gap-2 pl-5 text-navy-800">
+                {position.highlights.map((highlight) => <li>{highlight[locale]}</li>)}
+              </ul>
+
+              <ul class="mt-6 flex flex-wrap gap-2 border-t border-paper-100 pt-5">
+                {position.stack.map((tech) => (
+                  <li
+                    data-chip
+                    data-tech-tag={tech}
+                    class="border border-paper-200 bg-paper-50 px-2.5 py-1 font-mono text-xs text-navy-500"
+                  >
+                    {tech}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+      <p class="print-hide mt-5 hidden text-sm text-navy-500" id="filter-empty">
+        {strings.filterEmpty}
+      </p>
+    </section>
+
+    <div class="grid gap-5 sm:grid-cols-2">
+      <section class="print-section print-break-avoid py-6">
+        <h2 class="eyebrow text-brass-600">{strings.cvEducation}</h2>
+        <div class="mt-5 flex flex-col gap-3">
+          {
+            cv.education.map((degree) => (
+              <div data-card class="border border-paper-200 bg-white p-5">
+                <h3 class="font-display text-base font-medium">{degree.degree[locale]}</h3>
+                <p class="mt-1 text-sm text-navy-500">{degree.institution}</p>
+                <p class="mt-3 font-mono text-xs text-navy-500">
+                  {formatRange(degree.start, degree.end, locale)}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="print-section print-break-avoid py-6">
+        <h2 class="eyebrow text-brass-600">{strings.cvCertifications}</h2>
+        <ul class="mt-5 flex flex-col gap-3">
+          {
+            cv.certifications.map((certification) => (
+              <li data-card class="border border-paper-200 bg-white p-5">
+                <p class="font-medium">{certification.name}</p>
+                <p class="mt-1 text-sm text-navy-500">{certification.issuer}</p>
+                <p class="mt-3 font-mono text-xs text-navy-500">
+                  {formatMonth(certification.issued, locale)}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+
+    <section class="print-section print-break-avoid py-10">
+      <h2 class="eyebrow text-brass-600">{strings.cvSkills}</h2>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          cv.skillGroups.map((group) => (
+            <div data-card class="border border-paper-200 bg-white p-5">
+              <p class="font-display text-sm font-medium text-brass-600">{group.label[locale]}</p>
+              <ul class="mt-4 flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <li
+                    data-chip
+                    data-tech-tag={item}
+                    class="border border-paper-200 bg-paper-50 px-2.5 py-1 font-mono text-xs text-navy-500"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="print-section print-break-avoid py-10">
+      <h2 class="eyebrow text-brass-600">{strings.cvLanguages}</h2>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          cv.languages.map((language) => (
+            <div data-card class="border border-paper-200 bg-white p-5">
+              <p class="font-display text-base font-medium">{language.name[locale]}</p>
+              <p class="mt-2 font-mono text-xs text-navy-500">{language.level[locale]}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</article>
+
+<script>
+  // The downloadable CV is this page printed by the browser, so the file is
+  // always real text in one column, which is the shape applicant tracking
+  // systems can parse.
+  document.getElementById("print-cv")?.addEventListener("click", () => {
+    window.print();
+  });
+
+  // Technology filter: picking a chip recedes the roles that did not use it and
+  // marks the matching stack tags, so "where did he actually use React?" is one
+  // click rather than a read-through.
+  const filter = document.getElementById("tech-filter");
+  const cards = Array.from(
+    document.querySelectorAll<HTMLElement>("#experience-list [data-card]"),
+  );
+  const emptyNote = document.getElementById("filter-empty");
+
+  function applyFilter(tech: string): void {
+    let matches = 0;
+
+    for (const card of cards) {
+      const stack = (card.dataset.stack ?? "").split("|");
+      const isMatch = tech === "*" || stack.includes(tech);
+
+      card.dataset.dimmed = String(!isMatch);
+      if (isMatch && tech !== "*") {
+        card.dataset.matched = "true";
+        matches += 1;
+      } else {
+        delete card.dataset.matched;
+        if (isMatch) matches += 1;
+      }
+    }
+
+    for (const tag of document.querySelectorAll<HTMLElement>("[data-tech-tag]")) {
+      if (tech !== "*" && tag.dataset.techTag === tech) {
+        tag.dataset.matched = "true";
+      } else {
+        delete tag.dataset.matched;
+      }
+    }
+
+    for (const chip of filter?.querySelectorAll<HTMLElement>("[data-tech]") ?? []) {
+      if (chip.dataset.tech === tech) {
+        chip.dataset.matched = "true";
+      } else {
+        delete chip.dataset.matched;
+      }
+    }
+
+    emptyNote?.classList.toggle("hidden", matches > 0);
+  }
+
+  filter?.addEventListener("click", (event) => {
+    const chip = (event.target as HTMLElement).closest<HTMLElement>("[data-tech]");
+    if (chip?.dataset.tech) applyFilter(chip.dataset.tech);
+  });
+</script>

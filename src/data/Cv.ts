@@ -1,8 +1,8 @@
 /**
  * Single source of truth for the CV.
  *
- * Both the /cv page and the generated /cv.pdf read from here, so the web
- * version and the downloadable file can never drift apart.
+ * Both the /cv page and the print stylesheet that produces the downloadable
+ * file read from here, so the web version and the PDF can never drift apart.
  */
 
 export type Locale = "pt" | "en";
@@ -70,8 +70,8 @@ const cv: ICv = {
     en: "Software Engineer",
   },
   location: {
-    pt: "Porto, Portugal — disponível para remoto",
-    en: "Porto, Portugal — open to remote",
+    pt: "Porto, Portugal. Disponível para remoto.",
+    en: "Porto, Portugal. Open to remote.",
   },
   email: "soarezel414@gmail.com",
   phone: "+351 911 108 710",
@@ -80,17 +80,17 @@ const cv: ICv = {
 
   summary: {
     pt:
-      "Engenheiro de software com mais de três anos de experiência em .NET e C#, " +
-      "a trabalhar atualmente na OutSystems com .NET Framework e React. " +
-      "Percurso feito em produto e em contexto industrial e financeiro, da Critical " +
-      "Manufacturing à Natixis, e experiência em low-code na Sogrape — a mesma " +
+      "Engenheiro de software com mais de três anos de experiência em .NET e C#. " +
+      "Trabalho atualmente na OutSystems, com .NET Framework e React. " +
+      "Antes disso passei por produto industrial na Critical Manufacturing e por " +
+      "sistemas financeiros na Natixis, e comecei em low-code na Sogrape, na mesma " +
       "plataforma da empresa onde hoje trabalho. A concluir o mestrado em Engenharia " +
       "de Software no ISEP.",
     en:
-      "Software engineer with over three years of experience in .NET and C#, " +
-      "currently at OutSystems working with .NET Framework and React. " +
-      "Background across product, industrial and financial contexts — from Critical " +
-      "Manufacturing to Natixis — plus hands-on low-code delivery at Sogrape on the " +
+      "Software engineer with over three years of experience in .NET and C#. " +
+      "Currently at OutSystems, working with .NET Framework and React. " +
+      "Before that I worked on industrial product at Critical Manufacturing and on " +
+      "financial systems at Natixis, and started out in low-code at Sogrape, on the " +
       "same platform I now help build. Completing an MSc in Software Engineering at ISEP.",
   },
 
@@ -108,8 +108,8 @@ const cv: ICv = {
       },
       highlights: [
         {
-          pt: "Desenvolvo funcionalidades de produto em C# e .NET Framework com interfaces em React.",
-          en: "Build product features in C# and .NET Framework with React front ends.",
+          pt: "Desenvolvo funcionalidades de produto em C# e .NET Framework, com interfaces em React.",
+          en: "Build product features in C# and .NET Framework, with React front ends.",
         },
         {
           pt: "Trabalho em equipa com metodologias ágeis, em ciclos de entrega contínua.",
@@ -194,19 +194,19 @@ const cv: ICv = {
       highlights: [
         {
           pt:
-            "aCarta — aplicação onde restaurantes criam a sua ementa e geram QR codes " +
+            "aCarta, uma aplicação onde restaurantes criam a sua ementa e geram QR codes " +
             "para a usar como menu digital.",
           en:
-            "aCarta — an application where restaurants build their menu and generate QR " +
+            "aCarta, an application where restaurants build their menu and generate QR " +
             "codes to use it as a digital menu.",
         },
         {
           pt:
-            "Weather Stations — aplicação interna para agricultores e gestores estudarem " +
-            "as condições meteorológicas por estação e por quinta. O gestor pediu-me " +
-            "depois uma segunda versão com previsões, feita com APIs e gráficos.",
+            "Weather Stations, uma aplicação interna para agricultores e gestores estudarem " +
+            "as condições meteorológicas por estação e por quinta. O gestor pediu depois " +
+            "uma segunda versão com previsões, feita com APIs e gráficos.",
           en:
-            "Weather Stations — an internal tool for farmers and managers to study weather " +
+            "Weather Stations, an internal tool for farmers and managers to study weather " +
             "conditions per station and per estate. My manager then asked for a second " +
             "version with forecasts, built with APIs and charts.",
         },
@@ -217,7 +217,7 @@ const cv: ICv = {
 
   education: [
     {
-      institution: "ISEP — Instituto Superior de Engenharia do Porto",
+      institution: "ISEP, Instituto Superior de Engenharia do Porto",
       degree: {
         pt: "Mestrado em Engenharia de Software",
         en: "MSc in Software Engineering",
@@ -226,7 +226,7 @@ const cv: ICv = {
       end: null,
     },
     {
-      institution: "ISEP — Instituto Superior de Engenharia do Porto",
+      institution: "ISEP, Instituto Superior de Engenharia do Porto",
       degree: {
         pt: "Licenciatura em Engenharia Informática",
         en: "BSc in Informatics Engineering",
@@ -239,7 +239,7 @@ const cv: ICv = {
   certifications: [
     {
       name: "Project Management Professional",
-      issuer: "APGEI — Associação Portuguesa de Gestão e Engenharia Industrial",
+      issuer: "APGEI, Associação Portuguesa de Gestão e Engenharia Industrial",
       issued: "2022-09",
     },
     {
@@ -289,7 +289,7 @@ const cv: ICv = {
     },
     {
       name: { pt: "Inglês", en: "English" },
-      level: { pt: "Fluente — profissional", en: "Fluent — professional" },
+      level: { pt: "Fluente, nível profissional", en: "Fluent, professional level" },
     },
     {
       name: { pt: "Espanhol", en: "Spanish" },

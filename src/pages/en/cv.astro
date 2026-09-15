@@ -1,0 +1,19 @@
+---
+import CvDocument from "../../components/CvDocument.astro";
+import cv from "../../data/Cv";
+import ui from "../../i18n/Ui";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const locale = "en" as const;
+const strings = ui[locale];
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${strings.cvTitle} — ${cv.name}, ${cv.headline[locale]}`}
+  description={strings.cvMetaDescription}
+  path="/en/cv"
+  alternatePath="/cv"
+>
+  <CvDocument locale={locale} />
+</BaseLayout>

@@ -1,0 +1,90 @@
+---
+import type { Locale } from "../data/Cv";
+import ui from "../i18n/Ui";
+import "../styles/global.css";
+
+// Astro resolves component props from a type named `Props`.
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  /** Path of this page in the current locale, e.g. "/cv". */
+  path: string;
+  /** Path of the same page in the other locale, e.g. "/en/cv". */
+  alternatePath: string;
+}
+
+const { locale, title, description, path, alternatePath } = Astro.props;
+
+const strings = ui[locale];
+const canonical = new URL(path, Astro.site).href;
+const alternate = new URL(alternatePath, Astro.site).href;
+const otherLocale: Locale = locale === "pt" ? "en" : "pt";
+const htmlLang = locale === "pt" ? "pt-PT" : "en";
+---
+
+<html lang={htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="alternate" hreflang={locale === "pt" ? "pt-PT" : "en"} href={canonical} />
+    <link rel="alternate" hreflang={otherLocale === "pt" ? "pt-PT" : "en"} href={alternate} />
+    <link rel="alternate" hreflang="x-default" href={new URL(path.replace(/^\/en/, "") || "/", Astro.site).href} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={locale === "pt" ? "pt_PT" : "en_GB"} />
+    <meta name="twitter:card" content="summary" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    />
+  </head>
+
+  <body>
+    <a
+      href="#main"
+      class="print-hide sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-brass-400 focus:px-4 focus:py-2 focus:text-navy-900"
+    >
+      {locale === "pt" ? "Saltar para o conteúdo" : "Skip to content"}
+    </a>
+
+    <header class="print-hide border-b border-navy-700 bg-navy-800 text-paper-100">
+      <nav
+        class="mx-auto flex max-w-5xl flex-wrap items-center gap-x-6 gap-y-3 px-6 py-5"
+        aria-label={locale === "pt" ? "Navegação principal" : "Main navigation"}
+      >
+        <a href={locale === "pt" ? "/" : "/en/"} class="lockup text-sm text-paper-50">
+          {strings.siteName}
+        </a>
+        <div class="ml-auto flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+          <a href={locale === "pt" ? "/cv" : "/en/cv"} class="text-brass-400 hover:text-brass-300">
+            {strings.navCv}
+          </a>
+          <a
+            href={alternatePath}
+            class="eyebrow text-navy-300 transition hover:text-paper-50"
+            hreflang={otherLocale === "pt" ? "pt-PT" : "en"}
+          >
+            {strings.cvOtherLanguage}
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+  </body>
+</html>

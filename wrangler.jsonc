@@ -4,6 +4,14 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "josesoares-eng",
   "compatibility_date": "2026-09-15",
+
+  // Kept on while the site is being built, so there is somewhere to review it.
+  // Set both to false once josesoares-eng.com is connected, so the site is not
+  // reachable at three addresses at once. Until then public/_headers sends
+  // noindex on these hosts.
+  "workers_dev": true,
+  "preview_urls": true,
+
   "assets": {
     "directory": "./dist",
     // Serve dist/404.html for paths that do not match a built page.

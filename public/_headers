@@ -1,0 +1,12 @@
+# Keep the workers.dev address and the per-deployment preview URLs out of search
+# results. Without this, the same content would be reachable at several
+# addresses and compete with josesoares-eng.com once the domain is connected.
+https://josesoares-eng.1190782.workers.dev/*
+  X-Robots-Tag: noindex, nofollow
+
+https://*.josesoares-eng.1190782.workers.dev/*
+  X-Robots-Tag: noindex, nofollow
+
+# Long-lived caching for the hashed build assets Astro emits.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
