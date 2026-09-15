@@ -1,1 +1,121 @@
 @import "tailwindcss";
+
+/*
+ * Visual identity carried over from the printed business card:
+ * deep slate-navy ground, brass-gold accent, wide-tracked caps for the name.
+ */
+@theme {
+  --color-navy-900: #1a2430;
+  --color-navy-800: #24323f;
+  --color-navy-700: #2c3e4e;
+  --color-navy-600: #3a4e5f;
+  --color-navy-500: #54697c;
+
+  --color-brass-400: #e0b36a;
+  --color-brass-300: #efc584;
+  --color-brass-600: #b78c47;
+
+  --color-paper-50: #faf9f6;
+  --color-paper-100: #f2efe9;
+  --color-paper-200: #e3ded4;
+
+  --font-display: "Jost", "Century Gothic", "Futura", sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-paper-50);
+    color: var(--color-navy-900);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The wide-tracked caps lockup from the business card. */
+  .lockup {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  :where(a, button):focus-visible {
+    outline: 2px solid var(--color-brass-600);
+    outline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/*
+ * Print rules for the CV.
+ *
+ * The downloadable CV is this same page printed by the browser, so the PDF is
+ * always real selectable text in a single column — which is what applicant
+ * tracking systems can actually parse. Anything that is navigation or a control
+ * is dropped, and entries are kept from splitting across pages.
+ */
+@media print {
+  @page {
+    margin: 14mm 14mm 16mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 10.5pt;
+  }
+
+  .print-hide {
+    display: none !important;
+  }
+
+  .print-plain {
+    background: #fff !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    border-color: #999 !important;
+  }
+
+  .print-break-avoid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  a {
+    color: #000 !important;
+    text-decoration: none;
+  }
+
+  /* Spell out link targets that carry information on paper. */
+  .print-url::after {
+    content: " (" attr(href) ")";
+    font-size: 8.5pt;
+    word-break: break-all;
+  }
+}
