@@ -20,6 +20,7 @@ const strings = ui[locale];
 
 const subjectOptions = services.map((service) => service.title[locale]);
 const cvPath = locale === "pt" ? "/cv" : "/en/cv";
+const privacyPath = locale === "pt" ? "/privacidade" : "/en/privacy";
 
 const businessSchema = {
   "@context": "https://schema.org",
@@ -207,6 +208,7 @@ const businessSchema = {
         strings={strings}
         email={cv.email}
         subjectOptions={subjectOptions}
+        privacyPath={privacyPath}
       />
 
       <aside class="flex flex-col gap-4">

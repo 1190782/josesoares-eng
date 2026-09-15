@@ -27,6 +27,14 @@ export interface IUiStrings {
   homeProcessLead: string;
   homeIncludes: string;
 
+  navPrivacy: string;
+  navTerms: string;
+  footerComplaintsBook: string;
+  footerLegalNote: string;
+  formConsentBefore: string;
+  formConsentLink: string;
+  formConsentAfter: string;
+
   serviceAudience: string;
   serviceFaq: string;
   serviceOthers: string;
@@ -108,6 +116,14 @@ const ui: Record<Locale, IUiStrings> = {
     homeProcess: "Como trabalho",
     homeProcessLead: "Quatro passos, sem surpresas pelo meio.",
     homeIncludes: "Inclui",
+
+    navPrivacy: "Política de Privacidade",
+    navTerms: "Termos e Condições",
+    footerComplaintsBook: "Livro de Reclamações",
+    footerLegalNote: "Prestador de serviços da sociedade da informação",
+    formConsentBefore: "Li e aceito a",
+    formConsentLink: "Política de Privacidade",
+    formConsentAfter: "e autorizo o tratamento dos meus dados para ser contactado.",
 
     serviceAudience: "Para quem é",
     serviceFaq: "Perguntas frequentes",
@@ -191,6 +207,14 @@ const ui: Record<Locale, IUiStrings> = {
     homeProcess: "How I work",
     homeProcessLead: "Four steps, no surprises along the way.",
     homeIncludes: "Includes",
+
+    navPrivacy: "Privacy Policy",
+    navTerms: "Terms and Conditions",
+    footerComplaintsBook: "Complaints Book",
+    footerLegalNote: "Information society service provider",
+    formConsentBefore: "I have read and accept the",
+    formConsentLink: "Privacy Policy",
+    formConsentAfter: "and agree to my data being used to contact me.",
 
     serviceAudience: "Who it is for",
     serviceFaq: "Frequently asked questions",

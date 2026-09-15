@@ -1,0 +1,20 @@
+---
+import LegalDocument from "../../components/LegalDocument.astro";
+import { privacyPage } from "../../data/Legal";
+import ui from "../../i18n/Ui";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const locale = "en" as const;
+const strings = ui[locale];
+const page = privacyPage;
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${page.title[locale]} | ${strings.siteName}`}
+  description={page.metaDescription[locale]}
+  path="/en/privacy"
+  alternatePath="/privacidade"
+>
+  <LegalDocument locale={locale} page={page} />
+</BaseLayout>

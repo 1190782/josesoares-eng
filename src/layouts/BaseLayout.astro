@@ -1,5 +1,6 @@
 ---
 import cv, { type Locale } from "../data/Cv";
+import { legalIdentity } from "../data/Legal";
 import ui from "../i18n/Ui";
 import "../styles/global.css";
 
@@ -68,12 +69,24 @@ const currentYear = new Date().getFullYear();
     <meta name="theme-color" content="#24323f" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {/* Fonts are served from this domain, so no visitor data reaches a third
+        party to render text. These two carry the first paint. */}
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="/fonts/Jost-latin-92zatBhPNqw73oTd4g.woff2"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="/fonts/IBMPlexSans-latin-zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYY.woff2"
     />
   </head>
 
@@ -151,7 +164,51 @@ const currentYear = new Date().getFullYear();
           </li>
         </ul>
 
-        <p class="font-mono text-xs text-navy-300">© {currentYear} {cv.name}</p>
+        <ul class="flex flex-col gap-2 font-mono text-xs">
+          <li>
+            <a
+              class="text-paper-100 transition hover:text-brass-300"
+              href={locale === "pt" ? "/privacidade" : "/en/privacy"}
+            >
+              {strings.navPrivacy}
+            </a>
+          </li>
+          <li>
+            <a
+              class="text-paper-100 transition hover:text-brass-300"
+              href={locale === "pt" ? "/termos" : "/en/terms"}
+            >
+              {strings.navTerms}
+            </a>
+          </li>
+          {
+            legalIdentity.hasRegisteredActivity && (
+              <li>
+                <a
+                  class="text-paper-100 transition hover:text-brass-300"
+                  href={legalIdentity.complaintsBookUrl}
+                  rel="noopener"
+                  target="_blank"
+                >
+                  {strings.footerComplaintsBook}
+                </a>
+              </li>
+            )
+          }
+        </ul>
+      </div>
+
+      <div class="border-t border-navy-700">
+        <div
+          class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-8 gap-y-2 px-6 py-6 font-mono text-xs text-navy-300"
+        >
+          <p>© {currentYear} {legalIdentity.name}</p>
+          <p>
+            {legalIdentity.name}
+            {legalIdentity.taxNumber.startsWith("PENDING") ? "" : ` · NIF ${legalIdentity.taxNumber}`}
+            {legalIdentity.address.startsWith("PENDING") ? "" : ` · ${legalIdentity.address}`}
+          </p>
+        </div>
       </div>
     </footer>
   </body>

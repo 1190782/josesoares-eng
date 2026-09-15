@@ -1,0 +1,79 @@
+---
+import type { Locale } from "../data/Cv";
+import type { ILegalPage } from "../data/Legal";
+import ui, { formatMonth } from "../i18n/Ui";
+
+interface Props {
+  locale: Locale;
+  page: ILegalPage;
+}
+
+const { locale, page } = Astro.props;
+const strings = ui[locale];
+
+const updatedLabel = formatMonth(page.updated.slice(0, 7), locale);
+---
+
+<article>
+  <header class="border-b-4 border-brass-400 bg-navy-800 text-paper-100">
+    <div class="mx-auto max-w-3xl px-6 py-14">
+      <nav aria-label="Breadcrumb">
+        <ol class="flex flex-wrap items-center gap-2 font-mono text-xs text-navy-300">
+          <li>
+            <a class="transition hover:text-brass-400" href={locale === "pt" ? "/" : "/en/"}>
+              {strings.breadcrumbHome}
+            </a>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" class="text-brass-400">{page.title[locale]}</li>
+        </ol>
+      </nav>
+
+      <h1 class="lockup mt-8 text-3xl leading-tight text-paper-50 sm:text-4xl">
+        {page.title[locale]}
+      </h1>
+      <p class="mt-6 max-w-prose leading-relaxed text-navy-300">{page.intro[locale]}</p>
+      <p class="mt-6 font-mono text-xs text-navy-300">
+        {locale === "pt" ? "Última atualização" : "Last updated"}: {updatedLabel}
+      </p>
+    </div>
+  </header>
+
+  <div class="mx-auto max-w-3xl px-6 py-14">
+    <div class="flex flex-col gap-10">
+      {
+        page.sections.map((section, index) => (
+          <section>
+            <h2 class="font-display text-xl font-medium text-navy-900">
+              <span class="mr-3 font-mono text-sm text-brass-600">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              {section.title[locale]}
+            </h2>
+
+            <div class="mt-4 flex flex-col gap-4">
+              {
+                section.paragraphs.map((paragraph) => (
+                  <p class="leading-relaxed text-navy-800">{paragraph[locale]}</p>
+                ))
+              }
+            </div>
+
+            {
+              section.items !== undefined && (
+                <ul class="mt-4 flex flex-col gap-3">
+                  {section.items.map((item) => (
+                    <li class="flex gap-3 leading-relaxed text-navy-800">
+                      <span aria-hidden="true" class="mt-2.5 h-1.5 w-1.5 shrink-0 bg-brass-400" />
+                      <span>{item[locale]}</span>
+                    </li>
+                  ))}
+                </ul>
+              )
+            }
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</article>

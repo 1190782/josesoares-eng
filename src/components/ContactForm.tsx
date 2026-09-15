@@ -6,6 +6,8 @@ interface IContactFormProps {
   strings: IUiStrings;
   email: string;
   subjectOptions: string[];
+  /** Where the consent label links, localised. */
+  privacyPath: string;
 }
 
 type SubmitState = "idle" | "sending" | "sent" | "invalid" | "failed";
@@ -20,6 +22,7 @@ export default function ContactForm({
   strings,
   email,
   subjectOptions,
+  privacyPath,
 }: IContactFormProps): React.ReactElement {
   const [state, setState] = useState<SubmitState>("idle");
   const [invalidField, setInvalidField] = useState<string | null>(null);
@@ -155,6 +158,29 @@ export default function ContactForm({
       <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
         <label htmlFor="contact-company">Company</label>
         <input id="contact-company" name="company" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+
+      <div className="mt-6 flex gap-3">
+        <input
+          className="mt-1 size-4 shrink-0 accent-brass-600"
+          id="contact-consent"
+          name="consent"
+          type="checkbox"
+          required
+          aria-invalid={invalidField === "consent"}
+        />
+        <label className="text-sm leading-relaxed text-navy-800" htmlFor="contact-consent">
+          {strings.formConsentBefore}{" "}
+          <a
+            className="underline decoration-brass-400 underline-offset-4"
+            href={privacyPath}
+            target="_blank"
+            rel="noopener"
+          >
+            {strings.formConsentLink}
+          </a>{" "}
+          {strings.formConsentAfter}
+        </label>
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">

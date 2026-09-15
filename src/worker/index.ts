@@ -25,6 +25,8 @@ interface IContactSubmission {
   message: string;
   /** Hidden field: real people leave it empty, most bots fill it in. */
   company: string;
+  /** Privacy policy acceptance, required before the message is sent on. */
+  consent: string;
 }
 
 const MAX_FIELD_LENGTH = 4000;
@@ -46,6 +48,9 @@ function validate(submission: IContactSubmission): string | null {
   if (submission.name.length < 2) return "name";
   if (!EMAIL_PATTERN.test(submission.email)) return "email";
   if (submission.message.length < 10) return "message";
+  // No consent, no processing: the GDPR basis for handling the message is the
+  // sender ticking this box.
+  if (submission.consent === "") return "consent";
   return null;
 }
 
@@ -55,6 +60,7 @@ function buildEmailBody(submission: IContactSubmission): string {
     `Email: ${submission.email}`,
     `Telefone: ${submission.phone || "(não indicado)"}`,
     `Assunto: ${submission.subject || "(não indicado)"}`,
+    `Consentimento RGPD: aceite`,
     "",
     submission.message,
   ];
@@ -76,6 +82,7 @@ async function handleContact(request: Request, env: IEnv): Promise<Response> {
     subject: readField(form, "subject"),
     message: readField(form, "message"),
     company: readField(form, "company"),
+    consent: readField(form, "consent"),
   };
 
   // Silently accept anything that tripped the honeypot, so bots get no signal.
