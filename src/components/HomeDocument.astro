@@ -1,0 +1,232 @@
+---
+import cv, { type Locale } from "../data/Cv";
+import {
+  capabilityGroups,
+  examples,
+  intro,
+  processSteps,
+  services,
+} from "../data/Services";
+import ui from "../i18n/Ui";
+import ContactForm from "./ContactForm.tsx";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const strings = ui[locale];
+
+const subjectOptions = services.map((service) => service.title[locale]);
+const cvPath = locale === "pt" ? "/cv" : "/en/cv";
+
+const businessSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: `${cv.name}, ${cv.headline[locale]}`,
+  description: strings.homeMetaDescription,
+  url: cv.website,
+  email: cv.email,
+  telephone: cv.phone,
+  image: `${cv.website}/og-image.png`,
+  priceRange: "$$",
+  founder: { "@type": "Person", name: cv.name, sameAs: cv.linkedin },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Porto",
+    addressCountry: "PT",
+  },
+  areaServed: [
+    { "@type": "City", name: "Porto" },
+    { "@type": "Country", name: "Portugal" },
+  ],
+  knowsLanguage: cv.languages.map((language) => language.name.en),
+  sameAs: [cv.linkedin],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: strings.homeServices,
+    itemListElement: services.map((service) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: service.title[locale],
+        description: service.description[locale],
+      },
+    })),
+  },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(businessSchema)} />
+
+<section class="border-b-4 border-brass-400 bg-navy-800 text-paper-100">
+  <div class="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+    <p class="eyebrow text-brass-400">{strings.homeHeroKicker}</p>
+    <h1 class="lockup mt-6 max-w-3xl text-3xl leading-tight text-paper-50 sm:text-5xl">
+      {strings.homeHeroHeading}
+    </h1>
+    <p class="mt-8 max-w-prose text-lg leading-relaxed text-navy-300">{intro[locale]}</p>
+
+    <div class="mt-10 flex flex-wrap gap-4">
+      <a
+        href="#contacto"
+        class="border border-brass-400 bg-brass-400 px-6 py-3 text-sm font-medium text-navy-900 transition hover:bg-brass-300"
+      >
+        {strings.homeHeroCta}
+      </a>
+      <a
+        href="#exemplos"
+        class="border border-navy-600 px-6 py-3 text-sm font-medium text-paper-100 transition hover:border-brass-400 hover:text-brass-400"
+      >
+        {strings.homeHeroSecondaryCta}
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="mx-auto max-w-5xl px-6">
+  <section id="servicos" class="scroll-mt-24 py-16">
+    <h2 class="eyebrow text-brass-600">{strings.homeServices}</h2>
+    <p class="mt-3 max-w-prose text-lg text-navy-500">{strings.homeServicesLead}</p>
+
+    <div class="mt-8 grid gap-5 md:grid-cols-2">
+      {
+        services.map((service) => (
+          <article class="flex flex-col border border-paper-200 bg-white p-6 shadow-sm">
+            <h3 class="font-display text-xl font-medium text-navy-900">
+              {service.title[locale]}
+            </h3>
+            <p class="mt-3 leading-relaxed text-navy-800">{service.description[locale]}</p>
+            <p class="eyebrow mt-6 text-brass-600">{strings.homeIncludes}</p>
+            <ul class="mt-3 flex flex-col gap-2">
+              {service.includes.map((item) => (
+                <li class="flex gap-3 text-sm text-navy-800">
+                  <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 bg-brass-400" />
+                  <span>{item[locale]}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section id="competencias" class="scroll-mt-24 border-t border-paper-200 py-16">
+    <h2 class="eyebrow text-brass-600">{strings.homeCapabilities}</h2>
+    <p class="mt-3 max-w-prose text-lg text-navy-500">{strings.homeCapabilitiesLead}</p>
+
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        capabilityGroups.map((group) => (
+          <div class="border border-paper-200 bg-white p-5">
+            <p class="font-display text-sm font-medium text-brass-600">{group.label[locale]}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {group.items.map((item) => (
+                <li class="border border-paper-200 bg-paper-50 px-2.5 py-1 font-mono text-xs text-navy-500">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section id="exemplos" class="scroll-mt-24 border-t border-paper-200 py-16">
+    <h2 class="eyebrow text-brass-600">{strings.homeExamples}</h2>
+    <p class="mt-3 max-w-prose text-lg text-navy-500">{strings.homeExamplesLead}</p>
+
+    <div class="mt-8 grid gap-5 md:grid-cols-2">
+      {
+        examples.map((example) => (
+          <article class="flex flex-col border border-paper-200 bg-white p-6 shadow-sm">
+            <p class="eyebrow text-navy-500">{example.sector[locale]}</p>
+            <h3 class="mt-3 font-display text-lg font-medium text-navy-900">
+              {example.title[locale]}
+            </h3>
+            <p class="mt-3 grow leading-relaxed text-navy-800">{example.description[locale]}</p>
+            <ul class="mt-6 flex flex-wrap gap-2 border-t border-paper-100 pt-5">
+              {example.stack.map((tech) => (
+                <li class="border border-paper-200 bg-paper-50 px-2.5 py-1 font-mono text-xs text-navy-500">
+                  {tech}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section id="processo" class="scroll-mt-24 border-t border-paper-200 py-16">
+    <h2 class="eyebrow text-brass-600">{strings.homeProcess}</h2>
+    <p class="mt-3 max-w-prose text-lg text-navy-500">{strings.homeProcessLead}</p>
+
+    <ol class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        processSteps.map((step, index) => (
+          <li class="border border-paper-200 bg-white p-5">
+            <p class="font-mono text-xs font-medium text-brass-600">
+              {String(index + 1).padStart(2, "0")}
+            </p>
+            <h3 class="mt-3 font-display text-base font-medium text-navy-900">
+              {step.title[locale]}
+            </h3>
+            <p class="mt-2 text-sm leading-relaxed text-navy-800">{step.description[locale]}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section id="contacto" class="scroll-mt-24 border-t border-paper-200 py-16">
+    <h2 class="font-display text-3xl font-medium text-navy-900">{strings.contactHeading}</h2>
+    <p class="mt-3 max-w-prose text-lg text-navy-500">{strings.contactLead}</p>
+
+    <div class="mt-8 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
+      <ContactForm
+        client:visible
+        strings={strings}
+        email={cv.email}
+        subjectOptions={subjectOptions}
+      />
+
+      <aside class="flex flex-col gap-4">
+        <div class="border border-paper-200 bg-white p-5">
+          <p class="eyebrow text-brass-600">{strings.formDirectEmail}</p>
+          <a
+            class="mt-3 block font-mono text-sm break-all text-navy-900 underline decoration-brass-400 underline-offset-4"
+            href={`mailto:${cv.email}`}
+          >
+            {cv.email}
+          </a>
+          <a
+            class="mt-4 block font-mono text-sm text-navy-900 underline decoration-brass-400 underline-offset-4"
+            href={`tel:${cv.phone.replace(/\s/g, "")}`}
+          >
+            {cv.phone}
+          </a>
+        </div>
+
+        <div class="border border-paper-200 bg-white p-5">
+          <p class="eyebrow text-brass-600">{strings.navCv}</p>
+          <p class="mt-3 text-sm leading-relaxed text-navy-800">
+            {
+              locale === "pt"
+                ? "Se estás a recrutar, o meu percurso completo está aqui."
+                : "If you are hiring, my full background is here."
+            }
+          </p>
+          <a
+            class="eyebrow mt-4 inline-block text-brass-600 underline underline-offset-4"
+            href={cvPath}
+          >
+            {strings.cvTitle}
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</div>

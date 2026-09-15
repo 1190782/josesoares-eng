@@ -1,9 +1,9 @@
 ---
-import HomeDocument from "../components/HomeDocument.astro";
-import ui from "../i18n/Ui";
-import BaseLayout from "../layouts/BaseLayout.astro";
+import HomeDocument from "../../components/HomeDocument.astro";
+import ui from "../../i18n/Ui";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 
-const locale = "pt" as const;
+const locale = "en" as const;
 const strings = ui[locale];
 ---
 
@@ -11,8 +11,8 @@ const strings = ui[locale];
   locale={locale}
   title={`${strings.homeTitle} | ${strings.siteName}`}
   description={strings.homeMetaDescription}
-  path="/"
-  alternatePath="/en/"
+  path="/en/"
+  alternatePath="/"
 >
   <HomeDocument locale={locale} />
 </BaseLayout>

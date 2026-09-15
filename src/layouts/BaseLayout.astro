@@ -1,5 +1,5 @@
 ---
-import type { Locale } from "../data/Cv";
+import cv, { type Locale } from "../data/Cv";
 import ui from "../i18n/Ui";
 import "../styles/global.css";
 
@@ -21,6 +21,18 @@ const canonical = new URL(path, Astro.site).href;
 const alternate = new URL(alternatePath, Astro.site).href;
 const otherLocale: Locale = locale === "pt" ? "en" : "pt";
 const htmlLang = locale === "pt" ? "pt-PT" : "en";
+const hreflang = locale === "pt" ? "pt-PT" : "en";
+const otherHreflang = otherLocale === "pt" ? "pt-PT" : "en";
+const home = locale === "pt" ? "/" : "/en/";
+
+const navLinks = [
+  { label: strings.navServices, href: `${home}#servicos` },
+  { label: strings.navExamples, href: `${home}#exemplos` },
+  { label: strings.navCv, href: locale === "pt" ? "/cv" : "/en/cv" },
+  { label: strings.navContact, href: `${home}#contacto` },
+];
+
+const currentYear = new Date().getFullYear();
 ---
 
 <html lang={htmlLang}>
@@ -31,16 +43,21 @@ const htmlLang = locale === "pt" ? "pt-PT" : "en";
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
-    <link rel="alternate" hreflang={locale === "pt" ? "pt-PT" : "en"} href={canonical} />
-    <link rel="alternate" hreflang={otherLocale === "pt" ? "pt-PT" : "en"} href={alternate} />
-    <link rel="alternate" hreflang="x-default" href={new URL(path.replace(/^\/en/, "") || "/", Astro.site).href} />
+    <link rel="alternate" hreflang={hreflang} href={canonical} />
+    <link rel="alternate" hreflang={otherHreflang} href={alternate} />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL(path.replace(/^\/en/, "") || "/", Astro.site).href}
+    />
 
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={cv.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={locale === "pt" ? "pt_PT" : "en_GB"} />
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
@@ -57,25 +74,28 @@ const htmlLang = locale === "pt" ? "pt-PT" : "en";
       href="#main"
       class="print-hide sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-brass-400 focus:px-4 focus:py-2 focus:text-navy-900"
     >
-      {locale === "pt" ? "Saltar para o conteúdo" : "Skip to content"}
+      {strings.skipToContent}
     </a>
 
     <header class="print-hide border-b border-navy-700 bg-navy-800 text-paper-100">
       <nav
         class="mx-auto flex max-w-5xl flex-wrap items-center gap-x-6 gap-y-3 px-6 py-5"
-        aria-label={locale === "pt" ? "Navegação principal" : "Main navigation"}
+        aria-label={strings.mainNavLabel}
       >
-        <a href={locale === "pt" ? "/" : "/en/"} class="lockup text-sm text-paper-50">
-          {strings.siteName}
-        </a>
+        <a href={home} class="lockup text-sm text-paper-50">{strings.siteName}</a>
+
         <div class="ml-auto flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
-          <a href={locale === "pt" ? "/cv" : "/en/cv"} class="text-brass-400 hover:text-brass-300">
-            {strings.navCv}
-          </a>
+          {
+            navLinks.map((link) => (
+              <a href={link.href} class="text-paper-100 transition hover:text-brass-400">
+                {link.label}
+              </a>
+            ))
+          }
           <a
             href={alternatePath}
             class="eyebrow text-navy-300 transition hover:text-paper-50"
-            hreflang={otherLocale === "pt" ? "pt-PT" : "en"}
+            hreflang={otherHreflang}
           >
             {strings.cvOtherLanguage}
           </a>
@@ -86,5 +106,45 @@ const htmlLang = locale === "pt" ? "pt-PT" : "en";
     <main id="main">
       <slot />
     </main>
+
+    <footer class="print-hide border-t-4 border-brass-400 bg-navy-800 text-paper-100">
+      <div
+        class="mx-auto flex max-w-5xl flex-wrap items-end justify-between gap-x-8 gap-y-6 px-6 py-12"
+      >
+        <div>
+          <p class="lockup text-sm text-paper-50">{strings.siteName}</p>
+          <p class="lockup mt-2 text-xs text-brass-400">{strings.siteTagline}</p>
+          <p class="mt-4 text-sm text-navy-300">{cv.location[locale]}</p>
+        </div>
+
+        <ul class="flex flex-col gap-2 font-mono text-xs">
+          <li>
+            <a class="text-paper-100 transition hover:text-brass-300" href={`mailto:${cv.email}`}>
+              {cv.email}
+            </a>
+          </li>
+          <li>
+            <a
+              class="text-paper-100 transition hover:text-brass-300"
+              href={`tel:${cv.phone.replace(/\s/g, "")}`}
+            >
+              {cv.phone}
+            </a>
+          </li>
+          <li>
+            <a
+              class="text-paper-100 transition hover:text-brass-300"
+              href={cv.linkedin}
+              rel="me noopener"
+              target="_blank"
+            >
+              linkedin.com/in/jose-soares-it
+            </a>
+          </li>
+        </ul>
+
+        <p class="font-mono text-xs text-navy-300">© {currentYear} {cv.name}</p>
+      </div>
+    </footer>
   </body>
 </html>
