@@ -24,6 +24,7 @@ const htmlLang = locale === "pt" ? "pt-PT" : "en";
 const hreflang = locale === "pt" ? "pt-PT" : "en";
 const otherHreflang = otherLocale === "pt" ? "pt-PT" : "en";
 const home = locale === "pt" ? "/" : "/en/";
+const ogImage = new URL("/og-image.png", Astro.site).href;
 
 const navLinks = [
   { label: strings.navServices, href: `${home}#servicos` },
@@ -57,7 +58,14 @@ const currentYear = new Date().getFullYear();
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={locale === "pt" ? "pt_PT" : "en_GB"} />
+    <meta property="og:locale:alternate" content={locale === "pt" ? "en_GB" : "pt_PT"} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${cv.name}, ${cv.headline[locale]}`} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="theme-color" content="#24323f" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 

@@ -30,7 +30,6 @@ const businessSchema = {
   email: cv.email,
   telephone: cv.phone,
   image: `${cv.website}/og-image.png`,
-  priceRange: "$$",
   founder: { "@type": "Person", name: cv.name, sameAs: cv.linkedin },
   address: {
     "@type": "PostalAddress",
@@ -39,7 +38,12 @@ const businessSchema = {
   },
   areaServed: [
     { "@type": "City", name: "Porto" },
+    { "@type": "AdministrativeArea", name: "Norte, Portugal" },
     { "@type": "Country", name: "Portugal" },
+  ],
+  availableLanguage: [
+    { "@type": "Language", name: "Portuguese", alternateName: "pt" },
+    { "@type": "Language", name: "English", alternateName: "en" },
   ],
   knowsLanguage: cv.languages.map((language) => language.name.en),
   sameAs: [cv.linkedin],

@@ -21,7 +21,7 @@ const { service } = Astro.props;
 <BaseLayout
   locale={locale}
   title={`${service.heading[locale]} | ${strings.siteName}, Porto`}
-  description={service.description[locale]}
+  description={service.metaDescription[locale]}
   path={`/servicos/${service.slug.pt}/`}
   alternatePath={`/en/services/${service.slug.en}/`}
 >

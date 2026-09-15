@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# The contact endpoint accepts POST only and has nothing to index.
+Disallow: /api/
+
+Sitemap: https://josesoares-eng.com/sitemap-index.xml

@@ -20,6 +20,11 @@ export interface IService {
   /** Search-facing page heading, longer and more specific than the card title. */
   heading: LocalisedText;
   description: LocalisedText;
+  /**
+   * Written for the search results page rather than for the site: around 155
+   * characters, naming the offer, the place and a reason to click.
+   */
+  metaDescription: LocalisedText;
   /** Two or three paragraphs for the service's own page. */
   body: LocalisedText[];
   audience: LocalisedText;
@@ -62,6 +67,14 @@ export const services: IService[] = [
     heading: {
       pt: "Criação de websites profissionais",
       en: "Professional website development",
+    },
+    metaDescription: {
+      pt:
+        "Criação de websites profissionais no Porto e em todo o país. Sites rápidos, " +
+        "otimizados para o Google e feitos à medida, sem templates. Orçamento gratuito.",
+      en:
+        "Professional website development from Porto, Portugal, and remote. Fast, " +
+        "search-optimised sites built from scratch, no templates. Free quote.",
     },
     description: {
       pt:
@@ -169,6 +182,14 @@ export const services: IService[] = [
     slug: { pt: "lojas-online", en: "online-stores" },
     title: { pt: "Lojas online", en: "Online stores" },
     heading: { pt: "Criação de lojas online", en: "Online store development" },
+    metaDescription: {
+      pt:
+        "Criação de lojas online com pagamentos por cartão e MB Way. Painel para geres " +
+        "produtos e encomendas, sem mensalidades de plataforma. Orçamento gratuito.",
+      en:
+        "Online store development with card and MB Way payments. A panel to manage " +
+        "products and orders, with no platform monthly fees. Free quote.",
+    },
     description: {
       pt:
         "Catálogo de produtos, carrinho e pagamentos a funcionar. Com um painel onde " +
@@ -273,6 +294,14 @@ export const services: IService[] = [
     slug: { pt: "sistemas-de-reservas", en: "booking-systems" },
     title: { pt: "Sistemas de reservas", en: "Booking systems" },
     heading: { pt: "Sistemas de reservas e marcações online", en: "Online booking systems" },
+    metaDescription: {
+      pt:
+        "Sistemas de marcações online para clínicas, cabeleireiros, restaurantes e " +
+        "ginásios. Disponibilidade real, confirmações por email e painel de gestão.",
+      en:
+        "Online booking systems for clinics, salons, restaurants and gyms. Real " +
+        "availability, email confirmations and a management panel.",
+    },
     description: {
       pt:
         "Marcações online para clínicas, cabeleireiros, restaurantes ou aluguer de espaços. " +
@@ -371,7 +400,18 @@ export const services: IService[] = [
   {
     slug: { pt: "menus-digitais-qr-code", en: "digital-menus-qr-code" },
     title: { pt: "QR codes e menus digitais", en: "QR codes and digital menus" },
-    heading: { pt: "Menus digitais com QR code para restaurantes", en: "QR code digital menus for restaurants" },
+    heading: {
+      pt: "Menus digitais com QR code para restaurantes",
+      en: "QR code digital menus for restaurants",
+    },
+    metaDescription: {
+      pt:
+        "Menus digitais com QR code para restaurantes. Mudas preços e pratos esgotados " +
+        "num minuto, sem reimprimir. Funciona em qualquer telemóvel, sem instalar app.",
+      en:
+        "QR code digital menus for restaurants. Change prices and mark dishes sold out in " +
+        "a minute, with no reprinting. Works on any phone, no app to install.",
+    },
     description: {
       pt:
         "Ementas que atualizas num painel e que mudam no instante seguinte, sem reimprimir " +
@@ -478,6 +518,14 @@ export const services: IService[] = [
     slug: { pt: "aplicacoes-de-gestao", en: "business-applications" },
     title: { pt: "Aplicações de gestão", en: "Business applications" },
     heading: { pt: "Aplicações de gestão feitas à medida", en: "Custom business applications" },
+    metaDescription: {
+      pt:
+        "Aplicações de gestão à medida: backoffices, painéis e relatórios. Feitas em " +
+        "torno do processo que já tens, com integração nos sistemas que usas.",
+      en:
+        "Custom business applications: back offices, dashboards and reports. Built around " +
+        "the process you already have, integrated with the systems you use.",
+    },
     description: {
       pt:
         "Backoffices, painéis e relatórios feitos à medida do processo que já tens, em vez " +
@@ -583,6 +631,14 @@ export const services: IService[] = [
     slug: { pt: "manutencao-e-alojamento", en: "hosting-and-maintenance" },
     title: { pt: "Manutenção e alojamento", en: "Hosting and maintenance" },
     heading: { pt: "Alojamento e manutenção de sites", en: "Website hosting and maintenance" },
+    metaDescription: {
+      pt:
+        "Alojamento e manutenção de sites: backups verificados, atualizações de " +
+        "segurança, monitorização e horas mensais para alterações. Sem período mínimo.",
+      en:
+        "Website hosting and maintenance: verified backups, security updates, uptime " +
+        "monitoring and monthly hours for changes. No minimum term.",
+    },
     description: {
       pt:
         "Depois do lançamento o site continua a precisar de alguém. Backups, atualizações " +
